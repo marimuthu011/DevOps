@@ -1,0 +1,51 @@
+replicaCount: 1
+image:
+  repository: quay.io/mrright404/demo-dash
+  pullPolicy: IfNotPresent
+  tag: "v1"
+
+imagePullSecrets: {}
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount: {}
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+livenessProbe:
+  httpGet:
+    path: /  
+    port: http  # This should match the name of your port in the container
+  initialDelaySeconds: 10  # Optional: time to wait before the probe starts
+  periodSeconds: 5          # Optional: how often to perform the probe
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress: {}
+resources: 
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+
+autoscaling: {}
+
+volumes: []
+volumeMounts: []
+
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

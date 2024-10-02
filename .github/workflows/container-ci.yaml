@@ -1,0 +1,24 @@
+name: ci integeration
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+
+    - name: build the docker image
+      run: |
+        cd ./cources/gitaction-compatency
+        podman build . --file Dockerfile --tag quay.io/zagaos/base-linux:$(date +%s)
+
+
+
+

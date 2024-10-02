@@ -1,0 +1,138 @@
+NAME: dashboard
+LAST DEPLOYED: Sun Sep 29 13:17:27 2024
+NAMESPACE: marimuthu
+STATUS: pending-install
+REVISION: 1
+TEST SUITE: None
+USER-SUPPLIED VALUES:
+{}
+
+COMPUTED VALUES:
+affinity: {}
+autoscaling: {}
+fullnameOverride: ""
+image:
+  pullPolicy: IfNotPresent
+  repository: quay.io/mrright404/demo-dash
+  tag: v1
+imagePullSecrets: marimuthu-secret
+ingress: {}
+livenessProbe: {}
+nameOverride: ""
+nodeSelector: {}
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+replicaCount: 1
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+securityContext: {}
+service:
+  port: 80
+  type: ClusterIP
+serviceAccount: {}
+tolerations: []
+volumeMounts: []
+volumes: []
+
+HOOKS:
+MANIFEST:
+---
+# Source: dashboard/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard
+  labels:
+    helm.sh/chart: dashboard-0.1.0
+    app.kubernetes.io/name: dashboard
+    app.kubernetes.io/instance: dashboard
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: dashboard
+    app.kubernetes.io/instance: dashboard
+---
+# Source: dashboard/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  labels:
+    helm.sh/chart: dashboard-0.1.0
+    app.kubernetes.io/name: dashboard
+    app.kubernetes.io/instance: dashboard
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dashboard
+      app.kubernetes.io/instance: dashboard
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: dashboard-0.1.0
+        app.kubernetes.io/name: dashboard
+        app.kubernetes.io/instance: dashboard
+        app.kubernetes.io/version: "1.16.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      imagePullSecrets:
+        marimuthu-secret
+      serviceAccountName: default
+      securityContext:
+        {}
+      containers:
+        - name: dashboard
+          securityContext:
+            {}
+          image: "quay.io/mrright404/demo-dash:v1"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            {}
+          readinessProbe:
+            null
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+---
+# Source: dashboard/templates/route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: dashboard
+  labels:
+    helm.sh/chart: dashboard-0.1.0
+    app.kubernetes.io/name: dashboard
+    app.kubernetes.io/instance: dashboard
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  to:
+    kind: Service
+    name: dashboard
+  port:
+    targetPort: port
+

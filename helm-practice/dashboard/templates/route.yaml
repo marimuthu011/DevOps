@@ -1,0 +1,13 @@
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "dashboard.fullname" . }}
+  labels:
+    {{- include "dashboard.labels" . | nindent 4 }}
+spec:
+  to:
+    kind: Service
+    name: {{ include "dashboard.fullname" . }}
+  port:
+    targetPort: 8080
