@@ -1,0 +1,18 @@
+replicas: 1
+
+image: quay.io/osclimate/postgresql-13
+tag: 1-101
+
+service:
+  port: 5432
+  type: ClusterIP
+
+storage:
+  capacity: 5Gi
+
+configMap:
+  data:
+      POSTGRESQL_USER: admin
+      POSTGRESQL_PASSWORD: admin123$
+      POSTGRESQL_DATABASE: admindb
+      POSTGRESQL_ADMIN_PASSWORD: Admin123$

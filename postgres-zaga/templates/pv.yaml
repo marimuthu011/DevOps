@@ -1,0 +1,13 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ .Chart.Name }}-pv
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  capacity:
+    storage: {{ .Values.storage.capacity }}
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data"
